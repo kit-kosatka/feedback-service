@@ -25,6 +25,8 @@ services:
     volumes:
       - ./app:/app/app
       - ./logs:/app/logs
+      - ./migrations:/app/migrations
+      - ./alembic.ini:/app/alembic.ini
     depends_on:
       db:
         condition: service_healthy
