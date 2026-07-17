@@ -31,7 +31,7 @@ async def analyze_sentiment(comment: str) -> str | None:
             max_tokens=5,
             temperature=0,
         )
-        result = response.choices[0].message.content.strip().lower()
+        result = response.choices[0].message.content.strip().lower().rstrip(".!")
 
         if result not in {"positive", "neutral", "negative"}:
             logger.warning("AI вернул неожиданный ответ: %s", result)
