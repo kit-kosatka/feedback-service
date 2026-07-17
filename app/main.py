@@ -1,4 +1,7 @@
-from fastapi import FastAPI
+import logging
+import time
+
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1.contact import router as contact_router
@@ -10,6 +13,7 @@ from app.core.logging import setup_logging
 
 setup_logging()
 settings = get_settings()
+logger = logging.getLogger(__name__)
 
 app = FastAPI(title="Feedback Service")
 
@@ -20,6 +24,24 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    start = time.time()
+    response = await call_next(request)
+    duration_ms = round((time.time() - start) * 1000, 2)
+
+    logger.info(
+        "%s %s -> %s (%sms)",
+        request.method,
+        request.url.path,
+        response.status_code,
+        duration_ms,
+    )
+
+    return response
+
 
 app.include_router(contact_router)
 app.include_router(health_router)
