@@ -33,7 +33,9 @@ async def check_rate_limit(request: Request) -> None:
     timestamps = [t for t in storage.get(client_ip, []) if t > window_start]
 
     if len(timestamps) >= settings.rate_limit_requests:
-        raise HTTPException(status_code=429, detail="Слишком много запросов, попробуйте позже")
+        raise HTTPException(
+            status_code=429, detail="Слишком много запросов, попробуйте позже"
+        )
 
     timestamps.append(now)
     storage[client_ip] = timestamps
