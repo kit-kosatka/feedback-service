@@ -11,10 +11,6 @@ client = Groq(api_key=settings.groq_api_key)
 
 
 async def analyze_sentiment(comment: str) -> str | None:
-    """
-    Определяет тональность комментария: positive / neutral / negative.
-    При любой ошибке возвращает None (fallback), не роняя сервис.
-    """
     try:
         response = client.chat.completions.create(
             model=settings.groq_model,

@@ -13,10 +13,6 @@ resend.api_key = settings.resend_api_key
 async def send_contact_emails(
     name: str, email: str, comment: str, sentiment: str | None
 ) -> bool:
-    """
-    Отправляет письмо владельцу сайта и копию пользователю.
-    При ошибке возвращает False (fallback), не роняя сервис.
-    """
     try:
         resend.Emails.send(
             {
